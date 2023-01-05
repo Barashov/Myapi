@@ -5,4 +5,4 @@ class Request:
         self.data = environ['wsgi.input']
         self.environ = environ
         self.content_type = environ['CONTENT_TYPE']
-
+        self.auth_header = environ['HTTP_AUTHORIZATION']

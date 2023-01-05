@@ -2,7 +2,7 @@ import json
 
 
 class Response:
-    def __init__(self, status=200, data: dict = None):
+    def __init__(self, status, data):
         self.status = str(status)
         self.raw_data = data
 

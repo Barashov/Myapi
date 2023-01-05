@@ -1,6 +1,7 @@
 from .request import Request
 from parse import parse
 from .exceptions import HandlerWasNotFoundException
+from .backends import BaseBackend
 
 
 class RoutersConstructor:
@@ -32,13 +33,15 @@ class RoutersConstructor:
 
 
 class MyAPI(RoutersConstructor):
+    authentication_class = BaseBackend
+
     def __init__(self):
         super(MyAPI, self).__init__()
 
     def __call__(self, environ: dict, start_response):
         request = Request(environ)
+        request.user = self.authentication_class.authenticate(request)
         data = self.request_handle(request, start_response)
-        
         return iter([data])
 
     def get_handler(self, request_path, method):
@@ -58,5 +61,4 @@ class MyAPI(RoutersConstructor):
         result = handler(request, **request_data)
         start_response(result.status, [])
         return result.data
-
 
